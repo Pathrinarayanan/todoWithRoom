@@ -12,14 +12,17 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.Instant
+import java.time.LocalDate
 import java.util.Date
 
+@RequiresApi(Build.VERSION_CODES.O)
 class MainViewmodel : ViewModel() {
     private var todoDao = MainApplication.todoDb.getTodoDao()
-     var text  by mutableStateOf("")
+     var searchText  by mutableStateOf("")
+     var dateClicked  by mutableStateOf(LocalDate.now())
     fun getTodo(): LiveData<List<Todo>> {
 
-        return todoDao.getTodo()
+        return todoDao.getTodo(dateClicked)
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun addTodo(title : String){
@@ -27,7 +30,12 @@ class MainViewmodel : ViewModel() {
             todoDao.addTodo(
                 Todo(title =title))
 
-            Log.d("pathris", "added ${todoDao.getTodo().value}")
+        }
+    }
+    fun updateTodo(title : String, id  : Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            todoDao.updateTodo(title =title,id =id)
+
 
         }
     }

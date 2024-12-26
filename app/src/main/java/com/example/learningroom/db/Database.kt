@@ -9,6 +9,7 @@ import com.example.learningroom.Converters
 import com.example.learningroom.Todo
 
 @Database(entities = [Todo::class] , version = 1)
+@TypeConverters(Converters::class)
 abstract class DatabaseRoom : RoomDatabase(){
     companion object{
          const val Name  ="todo_db"
